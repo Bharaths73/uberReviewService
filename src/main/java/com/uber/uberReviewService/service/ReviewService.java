@@ -1,34 +1,22 @@
 package com.uber.uberReviewService.service;
 
 import java.util.List;
+import java.util.Optional;
 
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.stereotype.Service;
-
-import com.uber.uberReviewService.Repository.BookingRepo;
-import com.uber.uberReviewService.Repository.ReviewRepo;
+import com.uber.uberReviewService.DTO.CreateReviewDto;
+import com.uber.uberReviewService.DTO.ResponseReviewDto;
 import com.uber.uberReviewService.models.Review;
 
-@Service
-public class ReviewService implements CommandLineRunner {
+public interface ReviewService {
 
-    private ReviewRepo reviewRepo;
-    private BookingRepo bookingRepo;
+    public Optional<Review> findReviewById(Long id);
 
-    public ReviewService(ReviewRepo reviewRepo,BookingRepo bookingRepo) {
-        this.reviewRepo = reviewRepo;
-        this.bookingRepo = bookingRepo;
-    }
+    public List<Review> findAllReviews();
 
-    @Override
-    public void run(String... args) throws Exception {
-        System.out.println("ReviewService is running...");
-        Review r=Review.builder().content("Great service!").rating(3.5).build();
-        reviewRepo.save(r);
-        r=Review.builder().content("Good service!").rating(4.5).build();
-        reviewRepo.save(r);
-        List<Review> reviews=reviewRepo.findAll();
-        reviews.forEach(review->System.out.println("Review ID: " + review.getId() + ", Content: " + review.getContent() + ", Rating: " + review.getRating()));
-    }
-    
+    public boolean deleteReviewById(Long id);
+
+    public ResponseReviewDto publishReview(CreateReviewDto createReviewDto);
+
+    public Review updateReview(Long id, Review review);
 }
+
